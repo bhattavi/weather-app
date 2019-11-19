@@ -17,15 +17,20 @@ class App extends React.Component {
     }
   }
 
-  getWeather = async (event) => {
+  getWeather = (event) => {
     event.preventDefault()
     const city = event.target.elements.city.value
     const country = event.target.elements.country.value
-    const reponse = await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${city},${country}&appid=${APPID}&units=metric`)
-    const data = await reponse.json()
+   
+    // const response = await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${city},${country}&appid=${APPID}&units=metric`)
+    // const data = await response.json()
+
+       fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city},${country}&appid=${APPID}&units=metric`)
+          .then(response => response.json())
+           .then(data => {
+
 
     this.setState({
-
       isLoading: false,
       temp: data.main.temp,
       city: data.name,
@@ -34,8 +39,11 @@ class App extends React.Component {
       description: data.weather[0].description
 
     })
+  }).catch(function(error){
+    console.log(error)
+  })
 
-  }
+}
 
 
   render() {
@@ -67,7 +75,7 @@ class App extends React.Component {
           <div className="list-group">
             {!this.state.isLoading && <h1 className="list-group-item, alert-danger" style={{ marginTop: "50px" }}>City: {this.state.city}</h1>}
             {!this.state.isLoading && <h1 className="list-group-item, alert-danger">Country: {this.state.country}</h1>}
-            {!this.state.isLoading && <h3 className="list-group-item, alert-danger">Tempreture: {this.state.temp}℃</h3>}
+            {!this.state.isLoading && <h3 className="list-group-item, alert-danger">Temperature: {this.state.temp}℃</h3>}
             {!this.state.isLoading && <h3 className="list-group-item, alert-danger">Humidity: {this.state.humidity}</h3>}
             {!this.state.isLoading && <p className="list-group-item, alert-danger">Description: {this.state.description}</p>}
           </div>
